@@ -2,6 +2,7 @@
 #include <SDL2/SDL.h>
 
 #include "mixer.h"
+#include "keyboard.h"
 
 /* Print the printable part of SDL audio device info */
 void print_deviceinfo(SDL_AudioSpec a)
@@ -46,9 +47,17 @@ int main(int argc, char** argv)
 
     SDL_Event e;
     int quit = 0;
+
+    keyboard_init();
+
     while(!quit) {
         while(SDL_PollEvent(&e)) {
-            if(e.type == SDL_QUIT) quit=1;
+            switch(e.type) {
+            case SDL_QUIT: quit=1; break;
+            case SDL_KEYDOWN:
+                keyboard_keydown(e.key.keysym.scancode);
+                break;
+            }
         }
         SDL_GL_SwapWindow(window);
     }
