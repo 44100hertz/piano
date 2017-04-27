@@ -2,8 +2,6 @@
 #include "music.h"
 #include "keyboard.h"
 
-static int get_note(int scancode);
-static void build_reverse_table();
 static void destroy();
 
 static Note current_note = {0};
