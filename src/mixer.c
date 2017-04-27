@@ -57,13 +57,13 @@ void mixer_callback(void* userdata, Uint8* stream, int len)
     Mixer* m = userdata;
     for(int i=0; i<len; i+=2) {
         if(m->scount == m->next_tick) {
-            Note note = m->note_callback();
-            m->note_rate = get_rate(note.pitch + 69);
+            m->note = m->note_callback();
+            m->note_rate = get_rate(m->note.pitch + 69);
             m->next_tick = m->scount +
                 (m->srate * 60) /
                 (m->bpm * m->tickrate);
         }
-        int16_t point = sin16(m->phase, m->srate);
+        int16_t point = sin16(m->phase, m->srate) * m->note.on;
         memcpy(&stream[i], &point, 2);
         m->phase += m->note_rate;
         m->scount++;
