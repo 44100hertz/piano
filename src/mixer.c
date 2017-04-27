@@ -5,7 +5,7 @@
 #include "mixer.h"
 
 const int voices = 32;
-#define PP 0xffff /* Pitch Precision */
+const int PP = 0xffff; /* Pitch Precision */
 
 /* Apply hard clipping to an out-of-bounds signal */
 static int16_t clamp16(int i)
@@ -22,10 +22,9 @@ static int16_t sin16(int phase, int srate)
 }
 
 /* Apply an operation to an array of ints */
-static int* map(int* data, int(*fn)(int))
+static inline void map(int* in, int* out, int num, int(*fn)(int))
 {
-    int v[voices];
-    for(int i=voices; i--;) v[i] = fn(data[i]);
+    for(int i=num; i--;) out[i] = fn(in[i]);
 }
 
 /* Sum an array of ints */
@@ -47,14 +46,22 @@ void mixer_init(Mixer *m, int srate)
 {
     memset(m, 0, sizeof(Mixer));
     m->srate = srate;
+    m->tickrate = 6;
+    m->bpm = 120;
 }
 
 void mixer_callback(void* userdata, Uint8* stream, int len)
 {
     Mixer* m = userdata;
-    for(int i=0; i<len; i++) {
+    for(int i=0; i<len; i+=2) {
+        if(m->scount == m->next_tick) {
+            m->next_tick = m->scount +
+                (m->srate * 60) /
+                (m->bpm * m->tickrate);
+        }
         int16_t point = sin16(m->phase, m->srate);
-        memcpy(&stream[i*2], &point, 2);
+        memcpy(&stream[i], &point, 2);
         m->phase += m->note_rate;
+        m->scount++;
     }
 }
