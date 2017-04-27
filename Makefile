@@ -2,8 +2,8 @@ CC?=g++
 RM=rm -f
 CFLAGS+=-std=gnu99 -g -Wall
 CFLAGS+=$(shell sdl2-config --cflags)
-LDFLAGS := $(shell sdl2-config --libs)
-LDFLAGS+=-lm
+LDFLAGS?=$(shell sdl2-config --libs)
+LDFLAGS+=-lm -g
 VPATH=src/
 
 SRCS=$(wildcard src/*.c)
