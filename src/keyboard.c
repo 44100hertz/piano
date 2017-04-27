@@ -4,9 +4,21 @@
 
 static void destroy();
 
-static Note current_note = {0};
+static Note current = {0};
 
 static int note_scancode[] = {
+    SDL_SCANCODE_Z,
+    SDL_SCANCODE_S,
+    SDL_SCANCODE_X,
+    SDL_SCANCODE_D,
+    SDL_SCANCODE_C,
+    SDL_SCANCODE_V,
+    SDL_SCANCODE_G,
+    SDL_SCANCODE_B,
+    SDL_SCANCODE_H,
+    SDL_SCANCODE_N,
+    SDL_SCANCODE_J,
+    SDL_SCANCODE_M,
     SDL_SCANCODE_Q,
     SDL_SCANCODE_2,
     SDL_SCANCODE_W,
@@ -50,15 +62,15 @@ void keyboard_keydown(SDL_Scancode scancode)
 {
     int note = scancode_note[scancode];
     if(note != -1) {
-        current_note.pitch = note;
-        current_note.on = 1;
+        current.pitch = note;
+        current.on = 1;
     }
 }
 
 Note keyboard_callback()
 {
-    Note copy = current_note;
-    current_note.on = 0;
+    Note copy = current;
+    current.on = current.on==0 ? 0 : current.on - (1/8.0);
     return copy;
 }
 
