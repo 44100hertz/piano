@@ -59,7 +59,7 @@ int main(int argc, char** argv)
             switch(e.type) {
             case SDL_QUIT: quit=1; break;
             case SDL_KEYDOWN:
-                keyboard_keydown(e.key.keysym.scancode);
+                if(!e.key.repeat) keyboard_keydown(e.key.keysym.scancode);
                 break;
             }
         }
