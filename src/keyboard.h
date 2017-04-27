@@ -1,6 +1,6 @@
-// deps:
-// #include <SDL2/SDL.h>
+/* #include <SDL2/SDL.h> */
+/* #include "music.h" */
 
 void keyboard_init();
 void keyboard_keydown(SDL_Scancode scancode);
-void keyboard_tick();
+Note keyboard_callback();

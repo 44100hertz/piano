@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <SDL2/SDL.h>
 
+#include "music.h"
 #include "mixer.h"
 #include "keyboard.h"
 
@@ -50,7 +51,7 @@ int main(int argc, char** argv)
     SDL_Event e;
     int quit = 0;
 
-    mixer_init(&m, have.freq);
+    mixer_init(&m, have.freq, keyboard_callback);
     keyboard_init();
 
     while(!quit) {

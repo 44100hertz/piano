@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <math.h>
 #include <SDL2/SDL.h>
+#include "music.h"
 #include "mixer.h"
 
 const int voices = 32;
@@ -42,12 +43,13 @@ static int get_rate(int note)
     return (440.0*PP) * pow(2, (note-69)/12.0);
 }
 
-void mixer_init(Mixer *m, int srate)
+void mixer_init(Mixer *m, int srate, Note (*callback)())
 {
     memset(m, 0, sizeof(Mixer));
     m->srate = srate;
     m->tickrate = 6;
     m->bpm = 120;
+    m->note_callback = callback;
 }
 
 void mixer_callback(void* userdata, Uint8* stream, int len)
@@ -55,6 +57,8 @@ void mixer_callback(void* userdata, Uint8* stream, int len)
     Mixer* m = userdata;
     for(int i=0; i<len; i+=2) {
         if(m->scount == m->next_tick) {
+            Note note = m->note_callback();
+            m->note_rate = get_rate(note.pitch + 69);
             m->next_tick = m->scount +
                 (m->srate * 60) /
                 (m->bpm * m->tickrate);

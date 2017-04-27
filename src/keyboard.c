@@ -1,9 +1,12 @@
 #include <SDL2/SDL.h>
+#include "music.h"
 #include "keyboard.h"
 
 static int get_note(int scancode);
 static void build_reverse_table();
 static void destroy();
+
+static Note current_note = {0};
 
 static int note_scancode[] = {
     SDL_SCANCODE_Q,
@@ -30,7 +33,8 @@ void keyboard_init()
 {
     /* Generate a reverse table */
     const int max = 284; /* highest possible scancode */
-    scancode_note = calloc(max, sizeof(int));
+    scancode_note = malloc(max * sizeof(int));
+    memset(scancode_note, -1, max * sizeof(int));
     const int num_notes = sizeof(note_scancode) / sizeof(int);
     for(int i=0; i<num_notes; ++i) {
         scancode_note[note_scancode[i]] = i;
@@ -47,11 +51,16 @@ static void destroy()
 void keyboard_keydown(SDL_Scancode scancode)
 {
     int note = scancode_note[scancode];
-    printf("%d\n", note);
+    if(note != -1) {
+        current_note.pitch = note;
+        current_note.on = 1;
+    }
 }
 
-void keyboard_tick()
+Note keyboard_callback()
 {
-    
+    Note copy = current_note;
+    current_note.on = 0;
+    return copy;
 }
 
