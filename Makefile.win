@@ -1,21 +1,20 @@
-CC?=gcc
+CC=i686-w64-mingw32-gcc -static
+SDL_ROOT=/usr/i686-w64-mingw32/sys-root/mingw/bin/
 RM=rm -f
-CFLAGS+=-std=gnu99 -g -Wall
-CFLAGS+=$(shell sdl2-config --cflags)
-LDFLAGS?=$(shell sdl2-config --static-libs)
-LDFLAGS+=-lm
+CFLAGS+=$(shell $(SDL_ROOT)/sdl2-config --cflags)
+LDFLAGS+=$(shell $(SDL_ROOT)/sdl2-config --static-libs) -s
 VPATH=src/
 
 SRCS=$(wildcard src/*.c)
 OBJS=$(subst .c,.o,$(SRCS))
 
-BIN=bin/test
+BIN=bin/piano.exe
 
 all: test
 
 test: $(OBJS)
 	mkdir -p bin/
-	$(CC) $(LDFLAGS) $(OBJS) -o $(BIN)
+	$(CC) $(OBJS) $(LDFLAGS) -o $(BIN)
 
 depend: .depend
 
