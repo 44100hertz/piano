@@ -3,6 +3,7 @@
 
 static int get_note(int scancode);
 static void build_reverse_table();
+static void destroy();
 
 static int note_scancode[] = {
     SDL_SCANCODE_Q,
@@ -35,11 +36,12 @@ void keyboard_init()
         scancode_note[note_scancode[i]] = i;
     }
 
-    void destroy()
-    {
-        free(scancode_note);
-    }
     atexit(destroy);
+}
+
+static void destroy()
+{
+    free(scancode_note);
 }
 
 void keyboard_keydown(SDL_Scancode scancode)
