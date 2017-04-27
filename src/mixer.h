@@ -1,12 +1,19 @@
 /* #include <SDL2/SDL.h> */
 
 typedef struct {
-    int srate;
+    int on;
+    int pitch;
+} Note;
+
+typedef struct {
+    long srate, scount;
     int phase;
     int note_rate;
     int point;
-    int sample_count;
-    int byte_count;
+    int next_tick;
+    int bpm;
+    int tickrate;
+    Note (*note_callback)();
 } Mixer;
 
 void mixer_init(Mixer* m, int srate);
