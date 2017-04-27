@@ -16,6 +16,8 @@ void print_deviceinfo(SDL_AudioSpec a)
 
 int main(int argc, char** argv)
 {
+    Mixer m;
+
     SDL_Init(SDL_INIT_AUDIO | SDL_INIT_VIDEO);
     SDL_AudioSpec want = {
         .freq = 48000,
@@ -23,6 +25,7 @@ int main(int argc, char** argv)
         .channels = 1,
         .samples = 512,
         .callback = mixer_callback,
+        .userdata = &m,
     };
     SDL_AudioSpec have;
 
@@ -34,7 +37,6 @@ int main(int argc, char** argv)
     }
 
     print_deviceinfo(have);
-    mixer_init(have.freq);
     SDL_PauseAudioDevice(dev, 0);
 
     SDL_GL_SetSwapInterval(1);
@@ -48,6 +50,7 @@ int main(int argc, char** argv)
     SDL_Event e;
     int quit = 0;
 
+    mixer_init(&m, have.freq);
     keyboard_init();
 
     while(!quit) {

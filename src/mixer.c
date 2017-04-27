@@ -4,12 +4,8 @@
 #include <SDL2/SDL.h>
 #include "mixer.h"
 
+const int voices = 32;
 #define PP 0xffff /* Pitch Precision */
-static const int voices = 32;
-
-static int offset;
-static int note_rate;
-static int srate;
 
 /* Apply hard clipping to an out-of-bounds signal */
 static int16_t clamp16(int i)
@@ -20,7 +16,7 @@ static int16_t clamp16(int i)
 }
 
 /* Make a usable sine wave */
-static int16_t sin16(int phase)
+static int16_t sin16(int phase, int srate)
 {
     return sin(phase * (M_2_PI / PP / srate)) * 0x7fff;
 }
@@ -47,17 +43,18 @@ static int get_rate(int note)
     return (440.0*PP) * pow(2, (note-69)/12.0);
 }
 
-void mixer_init(int _srate)
+void mixer_init(Mixer *m, int srate)
 {
-    srate = _srate;
-    note_rate = get_rate(78);
+    memset(m, 0, sizeof(Mixer));
+    m->srate = srate;
 }
 
 void mixer_callback(void* userdata, Uint8* stream, int len)
 {
-    for(int i=0; i<len; i+=2) {
-        int16_t point = sin16(offset);
-        memcpy(&stream[i], &point, 2);
-        offset += note_rate;
+    Mixer* m = userdata;
+    for(int i=0; i<len; i++) {
+        int16_t point = sin16(m->phase, m->srate);
+        memcpy(&stream[i*2], &point, 2);
+        m->phase += m->note_rate;
     }
 }
