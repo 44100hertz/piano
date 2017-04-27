@@ -7,7 +7,7 @@ LDFLAGS+=-lm -g
 VPATH=src/
 
 SRCS=$(wildcard src/*.c)
-OBJS=$(subst .cpp,.o,$(SRCS))
+OBJS=$(subst .c,.o,$(SRCS))
 
 BIN=bin/test
 
