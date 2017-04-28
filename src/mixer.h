@@ -5,10 +5,8 @@ typedef struct {
     long srate, scount;
     long next_tick;
     int bpm, tickrate;
-    int pitch[NUMV];
-    int phase[NUMV];
-    int note_rate[NUMV];
-    int point[NUMV];
+    long phase[NUMV];
+    long note_rate[NUMV];
     int note_on[NUMV];
     Beat (*callback)();
 } Mixer;

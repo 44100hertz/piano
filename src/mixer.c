@@ -14,15 +14,15 @@ static int16_t clamp16(int i)
 }
 
 /* Make a usable sine wave */
-static int16_t sin16(int phase, int srate)
+static int16_t sin16(long phase, long srate)
 {
-    return sin(phase * (M_2_PI / PP / srate)) * 0x7fff;
+    return sin(phase * (2 * M_PI / PP / srate)) * 0x7fff;
 }
 
 /* Given a midi note, find the period */
-static int get_rate(int note)
+static long get_rate(int note)
 {
-    return (440.0*PP) * pow(2, (note-69)/12.0);
+    return (440*PP) * pow(2, (note-69)/12.0);
 }
 
 void mixer_init(Mixer *m, int srate, Beat (*callback)())

@@ -1,6 +1,6 @@
 #ifndef PP
-#define PP 0xffff /* Pitch Precision; when phase or pitch is used, I
-                   * use integers, and this is the denominator. */
+#define PP 0xff /* Pitch Precision; when phase or pitch is used, I use
+                 * integers, and this is the denominator. */
 #endif
 
 #ifndef NUMV
