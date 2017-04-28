@@ -16,7 +16,7 @@ static int16_t clamp16(int i)
 /* Make a usable sine wave */
 static int16_t sin16(long phase, long srate)
 {
-    return sin(phase * (2 * M_PI / PP / srate)) * 0x7fff;
+    return sin(fmod(phase * (2 * M_PI / PP / srate), 10)) * 0x1fff;
 }
 
 /* Given a midi note, find the period */
