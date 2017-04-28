@@ -1,4 +1,4 @@
 typedef struct {
-    double on;
+    int on;
     int pitch;
 } Note;

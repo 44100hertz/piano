@@ -70,7 +70,7 @@ void keyboard_keydown(SDL_Scancode scancode)
 Note keyboard_callback()
 {
     Note copy = current;
-    current.on = current.on==0 ? 0 : current.on - (1/8.0);
+    current.on = 0;
     return copy;
 }
 
