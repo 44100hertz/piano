@@ -34,16 +34,6 @@ void mixer_init(Mixer *m, int srate, Beat (*callback)())
     m->callback = callback;
 }
 
-void tick(Mixer* m)
-{
-    /* Beat b = m->callback(); */
-    /* TODO: load beat data into current state */
-    /* m->note_rate = get_rate(m->note.pitch + 69); */
-    m->next_tick = m->scount +
-        (m->srate * 60) /
-        (m->bpm * m->tickrate);
-}
-
 void mixer_callback(void* userdata, Uint8* stream, int len)
 {
     Mixer* m = userdata;
