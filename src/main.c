@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <SDL2/SDL.h>
 
-#include "music.h"
+#include "global.h"
 #include "mixer.h"
 #include "keyboard.h"
 
@@ -60,6 +60,9 @@ int main(int argc, char** argv)
             case SDL_QUIT: quit=1; break;
             case SDL_KEYDOWN:
                 if(!e.key.repeat) keyboard_keydown(e.key.keysym.scancode);
+                break;
+            case SDL_KEYUP:
+                if(!e.key.repeat) keyboard_keyup(e.key.keysym.scancode);
                 break;
             }
         }

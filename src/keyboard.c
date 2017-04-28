@@ -1,10 +1,10 @@
 #include <SDL2/SDL.h>
-#include "music.h"
+#include "global.h"
 #include "keyboard.h"
 
 static void destroy();
 
-static Note current = {0};
+static Beat beat = {0};
 
 static int note_scancode[] = {
     SDL_SCANCODE_Z, /* C +0 */
@@ -61,16 +61,32 @@ static void destroy()
 void keyboard_keydown(SDL_Scancode scancode)
 {
     int note = scancode_note[scancode];
-    if(note != -1) {
-        current.pitch = note;
-        current.on = 1;
+    if(note==-1) return;
+
+    for(int i=0; i<NUMV; i++) {
+        if(!beat.on[i]) {
+            beat.note[i] = note;
+            beat.on[i] = 1;
+            break;
+        }
     }
 }
 
-Note keyboard_callback()
+void keyboard_keyup(SDL_Scancode scancode)
 {
-    Note copy = current;
-    current.on = 0;
-    return copy;
+    int note = scancode_note[scancode];
+    if(note==-1) return;
+
+    for(int i=0; i < NUMV; i++) {
+        if(beat.note[i] == note) {
+            beat.note[i] = -1;
+            beat.on[i] = 0;
+            break;
+        }
+    }
 }
 
+Beat keyboard_callback()
+{
+    return beat;
+}

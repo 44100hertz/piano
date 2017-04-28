@@ -1,17 +1,17 @@
 /* #include <SDL2/SDL.h> */
-/* #include "music.h" */
+/* #include "global.h" */
 
 typedef struct {
     long srate, scount;
-    int phase;
-    int note_rate;
-    int point;
-    int next_tick;
-    int bpm;
-    int tickrate;
-    Note note;
-    Note (*note_callback)();
+    long next_tick;
+    int bpm, tickrate;
+    int pitch[NUMV];
+    int phase[NUMV];
+    int note_rate[NUMV];
+    int point[NUMV];
+    int note_on[NUMV];
+    Beat (*callback)();
 } Mixer;
 
-void mixer_init(Mixer* m, int srate, Note (*callback)());
+void mixer_init(Mixer* m, int srate, Beat (*callback)());
 void mixer_callback(void* userdata, Uint8* stream, int len);
