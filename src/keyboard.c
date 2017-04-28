@@ -5,6 +5,7 @@
 static void destroy();
 
 static Beat beat = {0};
+static int instr = 0;
 
 static int note_scancode[] = {
     SDL_SCANCODE_Z, /* C +0 */
@@ -60,14 +61,21 @@ static void destroy()
 
 void keyboard_keydown(SDL_Scancode scancode)
 {
-    int note = scancode_note[scancode];
-    if(note==-1) return;
+    int note;
+    switch(scancode) {
+    case SDL_SCANCODE_PAGEDOWN: --instr; break;
+    case SDL_SCANCODE_PAGEUP: ++instr; break;
+    default:
+        note = scancode_note[scancode];
+        if(note==-1) return;
 
-    for(int i=0; i<NUMV; i++) {
-        if(!beat.on[i]) {
-            beat.note[i] = note;
-            beat.on[i] = 1;
-            break;
+        for(int i=0; i<NUMV; i++) {
+            if(!beat.on[i]) {
+                beat.note[i] = note;
+                beat.on[i] = 1;
+                beat.instr[i] = instr;
+                break;
+            }
         }
     }
 }
