@@ -1,7 +1,7 @@
 CC?=gcc
 RM=rm -f
 CFLAGS:=-std=gnu99 -g -Wall $(shell sdl2-config --cflags) $(CFLAGS)
-LDFLAGS:=$(shell sdl2-config --libs) -lm $(LDFLAGS)
+LDFLAGS:=$(shell sdl2-config --libs) -lm -g $(LDFLAGS)
 VPATH=src/
 
 SRCS=$(wildcard src/*.c)
