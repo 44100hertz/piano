@@ -1,9 +1,7 @@
 CC?=gcc
 RM=rm -f
-CFLAGS+=-std=gnu99 -g -Wall
-CFLAGS+=$(shell sdl2-config --cflags)
-LDFLAGS?=$(shell sdl2-config --static-libs)
-LDFLAGS+=-lm
+CFLAGS:=-std=gnu99 -g -Wall $(shell sdl2-config --cflags) $(CFLAGS)
+LDFLAGS:=$(shell sdl2-config --libs) -lm $(LDFLAGS)
 VPATH=src/
 
 SRCS=$(wildcard src/*.c)
@@ -15,7 +13,7 @@ all: test
 
 test: $(OBJS)
 	mkdir -p bin/
-	$(CC) $(LDFLAGS) $(OBJS) -o $(BIN)
+	$(CC) $(OBJS) $(LDFLAGS) -o $(BIN)
 
 depend: .depend
 
