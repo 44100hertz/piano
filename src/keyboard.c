@@ -42,7 +42,7 @@ static int* scancode_note;
 void keyboard_init()
 {
     /* Generate a reverse table */
-    const int max = 284; /* highest possible scancode */
+    const int max = SDL_NUM_SCANCODES;
     scancode_note = malloc(max * sizeof(int));
     memset(scancode_note, -1, max * sizeof(int));
     const int num_notes = sizeof(note_scancode) / sizeof(int);
@@ -77,7 +77,7 @@ void keyboard_keyup(SDL_Scancode scancode)
     int note = scancode_note[scancode];
     if(note==-1) return;
 
-    for(int i=0; i < NUMV; i++) {
+    for(int i=0; i<NUMV; i++) {
         if(beat.note[i] == note) {
             beat.note[i] = -1;
             beat.on[i] = 0;
