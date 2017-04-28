@@ -5,7 +5,7 @@ typedef struct {
     long srate, scount;
     long next_tick;
     int bpm, tickrate;
-    int instr[NUMV];
+    Instr instr[NUMV];
     long phase[NUMV];
     long note_rate[NUMV];
     int note_on[NUMV];

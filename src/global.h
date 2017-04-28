@@ -8,6 +8,9 @@
 #endif
 
 typedef struct {
+} Instr;
+
+typedef struct {
     int on[NUMV];
     int note[NUMV];
     int instr[NUMV];
