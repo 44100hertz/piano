@@ -10,5 +10,6 @@
 typedef struct {
     int on[NUMV];
     int note[NUMV];
+    int instr[NUMV];
     /* other data here later */
 } Beat;
