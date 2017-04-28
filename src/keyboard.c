@@ -7,35 +7,35 @@ static void destroy();
 static Note current = {0};
 
 static int note_scancode[] = {
-    SDL_SCANCODE_Z,
-    SDL_SCANCODE_S,
-    SDL_SCANCODE_X,
-    SDL_SCANCODE_D,
-    SDL_SCANCODE_C,
-    SDL_SCANCODE_V,
-    SDL_SCANCODE_G,
-    SDL_SCANCODE_B,
-    SDL_SCANCODE_H,
-    SDL_SCANCODE_N,
-    SDL_SCANCODE_J,
-    SDL_SCANCODE_M,
-    SDL_SCANCODE_Q,
-    SDL_SCANCODE_2,
-    SDL_SCANCODE_W,
-    SDL_SCANCODE_3,
-    SDL_SCANCODE_E,
-    SDL_SCANCODE_R,
-    SDL_SCANCODE_5,
-    SDL_SCANCODE_T,
-    SDL_SCANCODE_6,
-    SDL_SCANCODE_Y,
-    SDL_SCANCODE_7,
-    SDL_SCANCODE_U,
-    SDL_SCANCODE_I,
-    SDL_SCANCODE_9,
-    SDL_SCANCODE_O,
-    SDL_SCANCODE_0,
-    SDL_SCANCODE_P,
+    SDL_SCANCODE_Z, /* C +0 */
+    SDL_SCANCODE_S, /* C#+0 */
+    SDL_SCANCODE_X, /* D +0 */
+    SDL_SCANCODE_D, /* D#+0 */
+    SDL_SCANCODE_C, /* E +0 */
+    SDL_SCANCODE_V, /* F +0 */
+    SDL_SCANCODE_G, /* F#+0 */
+    SDL_SCANCODE_B, /* G +0 */
+    SDL_SCANCODE_H, /* G#+0 */
+    SDL_SCANCODE_N, /* A +0 */
+    SDL_SCANCODE_J, /* A#+0 */
+    SDL_SCANCODE_M, /* B +0 */
+    SDL_SCANCODE_Q, /* C +1 */
+    SDL_SCANCODE_2, /* C#+1 */
+    SDL_SCANCODE_W, /* D +1 */
+    SDL_SCANCODE_3, /* D#+1 */
+    SDL_SCANCODE_E, /* E +1 */
+    SDL_SCANCODE_R, /* F +1 */
+    SDL_SCANCODE_5, /* F#+1 */
+    SDL_SCANCODE_T, /* G +1 */
+    SDL_SCANCODE_6, /* G#+1 */
+    SDL_SCANCODE_Y, /* A +1 */
+    SDL_SCANCODE_7, /* A#+1 */
+    SDL_SCANCODE_U, /* B +1 */
+    SDL_SCANCODE_I, /* C +2 */
+    SDL_SCANCODE_9, /* C#+2 */
+    SDL_SCANCODE_O, /* D +2 */
+    SDL_SCANCODE_0, /* D#+2 */
+    SDL_SCANCODE_P, /* E +2 */
 };
 static int* scancode_note;
 
