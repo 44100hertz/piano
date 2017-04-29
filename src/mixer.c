@@ -24,7 +24,7 @@ void mixer_init(Mixer *m, int srate, Beat (*callback)())
 {
     memset(m, 0, sizeof(*m));
     m->srate = srate;
-    m->tickrate = 6;
+    m->tickrate = 24;
     m->bpm = 120;
     m->callback = callback;
 }
@@ -37,8 +37,13 @@ void mixer_callback(void* userdata, Uint8* stream, int len)
             Beat b = m->callback();
             for(int i=0; i<NUMV; i++)
                 m->note_rate[i] = get_rate(b.note[i]+69);
-            for(int i=0; i<NUMV; i++)
-                m->note_on[i] = b.on[i];
+            for(int i=0; i<NUMV; i++) {
+                if(b.on[i]) {
+                    m->note_on[i]++;
+                } else {
+                    m->note_on[i]=0;
+                }
+            }
             for(int i=0; i<NUMV; i++)
                 m->instr[i] = b.instr[i];
 
@@ -52,9 +57,7 @@ void mixer_callback(void* userdata, Uint8* stream, int len)
         /* Find corresponding sine tones */
         int mix[NUMV] = {0};
         for(int i=0; i<NUMV; i++) {
-            if(m->note_on[i]) {
-                mix[i] = instr_get(&m->instr[i], m->phase[i], m->srate);
-            }
+            mix[i] = instr_get(&m->instr[i], m->note_on[i], m->phase[i], m->srate);
         }
 
         /* Sum the channel values */

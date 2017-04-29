@@ -1,3 +1,3 @@
 /* #include global.h */
 
-int instr_get(Instr* instr, long phase, long srate);
+int instr_get(Instr* instr, int note_on, long phase, long srate);
