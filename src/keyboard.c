@@ -73,7 +73,7 @@ void keyboard_keydown(SDL_Scancode scancode)
             if(!beat.on[i]) {
                 beat.note[i] = note;
                 beat.on[i] = 1;
-                beat.instr[i] = instr;
+                /* beat.instr[i] = instr; */
                 break;
             }
         }

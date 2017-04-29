@@ -37,8 +37,10 @@ void mixer_callback(void* userdata, Uint8* stream, int len)
             Beat b = m->callback();
             for(int i=0; i<NUMV; i++)
                 m->note_rate[i] = get_rate(b.note[i]+69);
-            memcpy(&m->note_on, &b.on, sizeof(b.on));
-            memcpy(&m->instr, &b.instr, sizeof(b.instr));
+            for(int i=0; i<NUMV; i++)
+                m->note_on[i] = b.on[i];
+            for(int i=0; i<NUMV; i++)
+                m->instr[i] = b.instr[i];
 
             int song_rate = m->bpm * m->tickrate;
             m->next_tick = m->scount + (m->srate * 60) / song_rate;
@@ -51,7 +53,7 @@ void mixer_callback(void* userdata, Uint8* stream, int len)
         int mix[NUMV] = {0};
         for(int i=0; i<NUMV; i++) {
             if(m->note_on[i]) {
-                mix[i] = instr_get(m->instr[i], m->phase[i], m->srate);
+                mix[i] = instr_get(&m->instr[i], m->phase[i], m->srate);
             }
         }
 
