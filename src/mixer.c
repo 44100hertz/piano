@@ -36,7 +36,7 @@ void mixer_callback(void* userdata, Uint8* stream, int len)
         if(m->scount == m->next_tick) {
             Beat b = m->callback();
             for(int i=0; i<NUMV; i++)
-                m->note_rate[i] = get_rate(b.note[i]+69);
+                m->note_rate[i] = get_rate(b.note[i]);
             for(int i=0; i<NUMV; i++) {
                 if(b.on[i]) {
                     m->note_on[i]++;

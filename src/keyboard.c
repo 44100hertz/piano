@@ -6,8 +6,10 @@ static void destroy();
 
 static Beat beat = {0};
 static int instr = 0;
+static int octave = 4;
 
 static int note_scancode[] = {
+    SDL_SCANCODE_A, /* B -1 */
     SDL_SCANCODE_Z, /* C +0 */
     SDL_SCANCODE_S, /* C#+0 */
     SDL_SCANCODE_X, /* D +0 */
@@ -59,19 +61,25 @@ static void destroy()
     free(scancode_note);
 }
 
+int to_a440(int note) {
+    return note + octave * 12 - 2;
+}
+
 void keyboard_keydown(SDL_Scancode scancode)
 {
     int note;
     switch(scancode) {
+    case SDL_SCANCODE_PAGEUP:   ++instr; break;
     case SDL_SCANCODE_PAGEDOWN: --instr; break;
-    case SDL_SCANCODE_PAGEUP: ++instr; break;
+    case SDL_SCANCODE_HOME: ++octave; break;
+    case SDL_SCANCODE_END:  --octave; break;
     default:
         note = scancode_note[scancode];
         if(note==-1) return;
 
         for(int i=0; i<NUMV; i++) {
             if(!beat.on[i]) {
-                beat.note[i] = note;
+                beat.note[i] = to_a440(note);
                 beat.on[i] = 1;
                 /* beat.instr[i] = instr; */
                 break;
@@ -86,7 +94,7 @@ void keyboard_keyup(SDL_Scancode scancode)
     if(note==-1) return;
 
     for(int i=0; i<NUMV; i++) {
-        if(beat.note[i] == note) {
+        if(beat.note[i] == to_a440(note)) {
             beat.note[i] = -1;
             beat.on[i] = 0;
             break;
