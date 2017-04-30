@@ -7,6 +7,7 @@ static void destroy();
 static Beat beat = {0};
 static int instr = 0;
 static int octave = 4;
+static int slot = 0; /* Rolling instrument index */
 
 static int note_scancode[] = {
     SDL_SCANCODE_A, /* B -1 */
@@ -42,6 +43,10 @@ static int note_scancode[] = {
 };
 static int* scancode_note;
 
+int to_a440(int note) {
+    return note + octave * 12 - 3;
+}
+
 void keyboard_init()
 {
     /* Generate a reverse table */
@@ -61,10 +66,6 @@ static void destroy()
     free(scancode_note);
 }
 
-int to_a440(int note) {
-    return note + octave * 12 - 2;
-}
-
 void keyboard_keydown(SDL_Scancode scancode)
 {
     int note;
@@ -77,32 +78,32 @@ void keyboard_keydown(SDL_Scancode scancode)
         note = scancode_note[scancode];
         if(note==-1) return;
 
-        for(int i=0; i<NUMV; i++) {
-            if(!beat.on[i]) {
-                beat.note[i] = to_a440(note);
-                beat.on[i] = 1;
-                /* beat.instr[i] = instr; */
-                break;
-            }
-        }
+        slot = (slot + 1) % NUMV;
+        beat.note[slot] = to_a440(note);
+        beat.on[slot] = 1;
+        /* beat.instr[i] = instr; */
     }
 }
 
 void keyboard_keyup(SDL_Scancode scancode)
 {
-    int note = scancode_note[scancode];
-    if(note==-1) return;
+    /* int note = scancode_note[scancode]; */
+    /* if(note==-1) return; */
 
-    for(int i=0; i<NUMV; i++) {
-        if(beat.note[i] == to_a440(note)) {
-            beat.note[i] = -1;
-            beat.on[i] = 0;
-            break;
-        }
-    }
+    /* for(int i=0; i<NUMV; i++) { */
+    /*     if(beat.note[i] == to_a440(note)) { */
+    /*         beat.note[i] = -1; */
+    /*         beat.on[i] = 0; */
+    /*         break; */
+    /*     } */
+    /* } */
 }
 
 Beat keyboard_callback()
 {
-    return beat;
+    Beat copy = beat;
+    for(int i=0; i<NUMV; ++i) {
+        if(beat.on[i]) beat.on[i]++;
+    }
+    return copy;
 }
