@@ -19,7 +19,10 @@ int main(int argc, char** argv)
 {
     Mixer m;
 
-    SDL_Init(SDL_INIT_AUDIO | SDL_INIT_VIDEO);
+    if(SDL_Init(SDL_INIT_AUDIO | SDL_INIT_VIDEO)) {
+        SDL_Log("%s", SDL_GetError());
+        return -1;
+    }
     SDL_AudioSpec want = {
         .freq = 48000,
         .format = AUDIO_S16,
@@ -34,7 +37,7 @@ int main(int argc, char** argv)
     if(!(dev = SDL_OpenAudioDevice(
              NULL, 0, &want, &have, SDL_AUDIO_ALLOW_ANY_CHANGE))) {
         SDL_Log("%s", SDL_GetError());
-        return 3;
+        return -1;
     }
 
     print_deviceinfo(have);

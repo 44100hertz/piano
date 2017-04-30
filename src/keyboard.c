@@ -5,9 +5,9 @@
 static void destroy();
 
 static Beat beat = {0};
-static int instr = 0;
-static int octave = 4;
-static int slot = 0; /* Rolling instrument index */
+static int instr;
+static int octave;
+static int slot; /* Rolling instrument index */
 
 static int note_scancode[] = {
     SDL_SCANCODE_A, /* B -1 */
@@ -49,6 +49,8 @@ int to_a440(int note) {
 
 void keyboard_init()
 {
+    instr = 0;
+    octave = 4;
     /* Generate a reverse table */
     const int max = SDL_NUM_SCANCODES;
     scancode_note = malloc(max * sizeof(int));
