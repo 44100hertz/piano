@@ -6,12 +6,10 @@
 #include "instr.h"
 #include "mixer.h"
 
-/* Apply hard clipping to an out-of-bounds signal */
-static inline int16_t clamp16(int i)
+static inline double softclip(double i)
 {
-    i = i < -0x7fff ? -0x7fff : i;
-    i = i >  0x7fff ?  0x7fff : i;
-    return i;
+    if(fabs(i) > 1) return copysign(1, i);
+    return i * 1.5 - 0.5 * i * i * i;
 }
 
 /* Given a midi note, find the period */
@@ -50,15 +48,15 @@ void mixer_callback(void* userdata, Uint8* stream, int len)
         for(int i=0; i<NUMV; i++) m->phase[i] += m->note_rate[i];
 
         /* Find corresponding sine tones */
-        int mix[NUMV] = {0};
+        double mix[NUMV] = {0};
         for(int i=0; i<NUMV; i++) {
             mix[i] = instr_get(&m->instr[i], m->note_on[i], m->phase[i], m->srate);
         }
 
         /* Sum the channel values */
-        int total = 0;
+        double total = 0;
         for(int i=0; i<NUMV; i++) total += mix[i];
-        uint16_t t = clamp16(total);
+        uint16_t t = softclip(total * 0.15) * 0x7fff;
         memcpy(&stream[i], &t, 2);
         m->scount++;
     }
