@@ -37,13 +37,8 @@ void mixer_callback(void* userdata, Uint8* stream, int len)
             Beat b = m->callback();
             for(int i=0; i<NUMV; i++)
                 m->note_rate[i] = get_rate(b.note[i]);
-            for(int i=0; i<NUMV; i++) {
-                if(b.on[i]) {
-                    m->note_on[i]++;
-                } else {
-                    m->note_on[i]=0;
-                }
-            }
+            for(int i=0; i<NUMV; i++)
+                m->note_on[i] = b.on[i];
             for(int i=0; i<NUMV; i++)
                 m->instr[i] = b.instr[i];
 
