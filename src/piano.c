@@ -28,7 +28,7 @@ int piano_init()
         .freq = 48000,
         .format = AUDIO_S16,
         .channels = 1,
-        .samples = 512,
+        .samples = 1024,
         .callback = mixer_callback,
         .userdata = &m,
     };
