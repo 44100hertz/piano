@@ -19,7 +19,10 @@ int main(int argc, char** argv)
 {
     Mixer m;
 
-    SDL_Init(SDL_INIT_AUDIO | SDL_INIT_VIDEO);
+    if(SDL_Init(SDL_INIT_AUDIO | SDL_INIT_VIDEO)) {
+        SDL_Log("%s", SDL_GetError());
+        return -1;
+    }
     SDL_AudioSpec want = {
         .freq = 48000,
         .format = AUDIO_S16,
@@ -34,26 +37,26 @@ int main(int argc, char** argv)
     if(!(dev = SDL_OpenAudioDevice(
              NULL, 0, &want, &have, SDL_AUDIO_ALLOW_ANY_CHANGE))) {
         SDL_Log("%s", SDL_GetError());
-        return 3;
+        return -1;
     }
 
     print_deviceinfo(have);
-    SDL_PauseAudioDevice(dev, 0);
-
     SDL_GL_SetSwapInterval(1);
+
     SDL_Window* window = SDL_CreateWindow(
         "Getting SDL to work",
         SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
         800, 600,
         SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN
         );
-
     SDL_Renderer* rdr = SDL_CreateRenderer(window, -1,
                                            SDL_RENDERER_PRESENTVSYNC |
                                            SDL_RENDERER_ACCELERATED |
-                                           SDL_RENDERER_TARGETTEXTURE);
+                                           SDL_RENDERER_TARGETTEXTURE
+        );
     mixer_init(&m, have.freq, keyboard_callback);
     keyboard_init();
+    SDL_PauseAudioDevice(dev, 0);
 
     SDL_Event e;
     int quit = 0;

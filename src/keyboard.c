@@ -4,10 +4,11 @@
 
 static void destroy();
 
-static Beat beat = {0};
-static int instr = 0;
-static int octave = 4;
-static int slot = 0; /* Rolling instrument index */
+static Tick tick;
+static int instr;
+static int octave;
+static int slot; /* Rolling instrument index */
+const int NO_NOTE = -1024;
 
 static int note_scancode[] = {
     SDL_SCANCODE_A, /* B -1 */
@@ -49,21 +50,31 @@ int to_a440(int note) {
 
 void keyboard_init()
 {
+    instr = 0;
+    octave = 4;
     /* Generate a reverse table */
     const int max = SDL_NUM_SCANCODES;
     scancode_note = malloc(max * sizeof(int));
-    memset(scancode_note, -1, max * sizeof(int));
+    memset(scancode_note, NO_NOTE, max * sizeof(int));
     const int num_notes = sizeof(note_scancode) / sizeof(int);
     for(int i=0; i<num_notes; ++i) {
         scancode_note[note_scancode[i]] = i;
     }
-
     atexit(destroy);
+
+    memset(&tick, 0, sizeof(tick));
 }
 
 static void destroy()
 {
     free(scancode_note);
+}
+
+void clear_keys()
+{
+    for(int i=0; i<NUMV; ++i)
+        if(tick.key_state[i]==KEY_HELD)
+            tick.key_state[i] = KEY_RELEASE;
 }
 
 void keyboard_keydown(SDL_Scancode scancode)
@@ -72,38 +83,36 @@ void keyboard_keydown(SDL_Scancode scancode)
     switch(scancode) {
     case SDL_SCANCODE_PAGEUP:   ++instr; break;
     case SDL_SCANCODE_PAGEDOWN: --instr; break;
-    case SDL_SCANCODE_HOME: ++octave; break;
-    case SDL_SCANCODE_END:  --octave; break;
+    case SDL_SCANCODE_HOME: ++octave; clear_keys(); break;
+    case SDL_SCANCODE_END:  --octave; clear_keys(); break;
     default:
         note = scancode_note[scancode];
-        if(note==-1) return;
+        if(note==NO_NOTE) return;
 
         slot = (slot + 1) % NUMV;
-        beat.note[slot] = to_a440(note);
-        beat.on[slot] = 1;
-        /* beat.instr[i] = instr; */
+        tick.note[slot] = to_a440(note);
+        tick.key_state[slot] = KEY_HELD;
+        tick.age[slot] = 0;
+        /* tick.instr[i] = instr; */
     }
 }
 
 void keyboard_keyup(SDL_Scancode scancode)
 {
-    /* int note = scancode_note[scancode]; */
-    /* if(note==-1) return; */
-
-    /* for(int i=0; i<NUMV; i++) { */
-    /*     if(beat.note[i] == to_a440(note)) { */
-    /*         beat.note[i] = -1; */
-    /*         beat.on[i] = 0; */
-    /*         break; */
-    /*     } */
-    /* } */
+    int note = to_a440(scancode_note[scancode]);
+    for(int i=0; i<NUMV; ++i) {
+        if(tick.note[i] == note && tick.key_state[i] == KEY_HELD) {
+            tick.key_state[i] = KEY_RELEASE;
+            return;
+        }
+    }
 }
 
-Beat keyboard_callback()
+Tick keyboard_callback()
 {
-    Beat copy = beat;
+    Tick copy = tick;
     for(int i=0; i<NUMV; ++i) {
-        if(beat.on[i]) beat.on[i]++;
+        if(tick.key_state[i] > KEY_OFF) tick.age[i]++;
     }
     return copy;
 }
