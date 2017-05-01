@@ -8,7 +8,7 @@ static Tick tick;
 static int instr;
 static int octave;
 static int slot; /* Rolling instrument index */
-const int NO_NOTE = -1024;
+static const int NO_NOTE = -1024;
 
 static int note_scancode[] = {
     SDL_SCANCODE_A, /* B -1 */
@@ -44,7 +44,7 @@ static int note_scancode[] = {
 };
 static int* scancode_note;
 
-int to_a440(int note) {
+static int to_a440(int note) {
     return note + octave * 12 - 3;
 }
 
@@ -70,7 +70,7 @@ static void destroy()
     free(scancode_note);
 }
 
-void clear_keys()
+static void clear_keys()
 {
     for(int i=0; i<NUMV; ++i)
         if(tick.key_state[i]==KEY_HELD)
