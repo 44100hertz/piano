@@ -40,8 +40,11 @@ void mixer_callback(void* userdata, Uint8* stream, int len)
         /* Sum the channel values */
         double total = 0;
         for(int i=0; i<NUMV; i++) total += instr_get(&m->tick[i], m->srate);
+
+        /* Quantize and fill part of buffer */
         int16_t total16 = softclip(total * 0.15) * 0x7fff;
         memcpy(&stream[i], &total16, 2);
+
         m->scount++;
     }
 }

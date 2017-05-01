@@ -1,0 +1,1 @@
+int piano_init();
