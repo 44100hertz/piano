@@ -17,9 +17,10 @@ enum {
 };
 
 typedef struct {
-    int age[NUMV];
-    int key_state[NUMV];
-    int note[NUMV];
-    Instr instr[NUMV];
-    /* other data here later */
-} Tick;
+    Instr* instr;
+    long   phase;
+    long   note_rate;
+    int    key_state;
+    int    age;
+    int    note;
+} Note;

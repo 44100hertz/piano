@@ -4,7 +4,7 @@
 
 static void destroy();
 
-static Tick tick;
+static Note tick[NUMV];
 static int instr;
 static int octave;
 static int slot; /* Rolling instrument index */
@@ -73,8 +73,8 @@ static void destroy()
 static void clear_keys()
 {
     for(int i=0; i<NUMV; ++i)
-        if(tick.key_state[i]==KEY_HELD)
-            tick.key_state[i] = KEY_RELEASE;
+        if(tick[i].key_state==KEY_HELD)
+            tick[i].key_state = KEY_RELEASE;
 }
 
 void keyboard_keydown(SDL_Scancode scancode)
@@ -90,9 +90,9 @@ void keyboard_keydown(SDL_Scancode scancode)
         if(note==NO_NOTE) return;
 
         slot = (slot + 1) % NUMV;
-        tick.note[slot] = to_a440(note);
-        tick.key_state[slot] = KEY_HELD;
-        tick.age[slot] = 0;
+        tick[slot].note = to_a440(note);
+        tick[slot].key_state = KEY_HELD;
+        tick[slot].age = 0;
         /* tick.instr[i] = instr; */
     }
 }
@@ -101,18 +101,17 @@ void keyboard_keyup(SDL_Scancode scancode)
 {
     int note = to_a440(scancode_note[scancode]);
     for(int i=0; i<NUMV; ++i) {
-        if(tick.note[i] == note && tick.key_state[i] == KEY_HELD) {
-            tick.key_state[i] = KEY_RELEASE;
+        if(tick[i].note == note && tick[i].key_state == KEY_HELD) {
+            tick[i].key_state = KEY_RELEASE;
             return;
         }
     }
 }
 
-Tick keyboard_callback()
+Note* keyboard_callback()
 {
-    Tick copy = tick;
     for(int i=0; i<NUMV; ++i) {
-        if(tick.key_state[i] > KEY_OFF) tick.age[i]++;
+        if(tick[i].key_state > KEY_OFF) tick[i].age++;
     }
-    return copy;
+    return tick;
 }

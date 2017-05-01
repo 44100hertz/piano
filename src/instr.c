@@ -13,10 +13,9 @@ double env_get(Instr* instr, int key_state, int age)
     }
 }
 
-double instr_get(Instr* instr, int key_state, int age,
-                 long phase, long srate)
+double instr_get(Note* note, long srate)
 {
-    double vol = env_get(instr, key_state, age);
-    double car = fabs(sin(phase * (2 * M_PI / PP / srate / 4.0)) * vol);
+    double vol = env_get(note->instr, note->key_state, note->age);
+    double car = fabs(sin(note->phase * (2 * M_PI / PP / srate / 4.0)) * vol);
     return sin(car);
 }

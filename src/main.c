@@ -15,7 +15,7 @@ void print_deviceinfo(SDL_AudioSpec a)
         a.freq, a.channels, a.samples);
 }
 
-int main(int argc, char** argv)
+int main(int windows, char** sucks)
 {
     Mixer m;
 

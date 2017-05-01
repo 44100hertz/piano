@@ -4,4 +4,4 @@
 void keyboard_init();
 void keyboard_keydown(SDL_Scancode scancode);
 void keyboard_keyup(SDL_Scancode scancode);
-Tick keyboard_callback();
+Note* keyboard_callback();
