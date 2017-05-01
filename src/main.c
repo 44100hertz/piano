@@ -41,8 +41,6 @@ int main(int argc, char** argv)
     }
 
     print_deviceinfo(have);
-    SDL_PauseAudioDevice(dev, 0);
-
     SDL_GL_SetSwapInterval(1);
     SDL_Window* window = SDL_CreateWindow(
         "Getting SDL to work",
@@ -56,6 +54,8 @@ int main(int argc, char** argv)
 
     mixer_init(&m, have.freq, keyboard_callback);
     keyboard_init();
+
+    SDL_PauseAudioDevice(dev, 0);
 
     while(!quit) {
         while(SDL_PollEvent(&e)) {

@@ -10,9 +10,16 @@
 typedef struct {
 } Instr;
 
+enum {
+    KEY_OFF,
+    KEY_HELD,
+    KEY_RELEASE,
+};
+
 typedef struct {
-    int on[NUMV];
+    int age[NUMV];
+    int key_state[NUMV];
     int note[NUMV];
     Instr instr[NUMV];
     /* other data here later */
-} Beat;
+} Tick;
