@@ -4,6 +4,7 @@
 typedef struct {
     long  srate, scount;
     long  next_tick;
+    int   num_ticks;
     int   bpm, tickrate;
     Note* tick;
     Note* (*callback)();

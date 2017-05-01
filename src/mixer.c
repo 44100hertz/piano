@@ -29,10 +29,12 @@ void mixer_callback(void* userdata, Uint8* stream, int len)
     Mixer* m = userdata;
     for(int i=0; i<len; i+=2) {
         if(m->scount == m->next_tick) {
-            m->next_tick = m->scount + (m->srate * 60) / m->bpm / m->tickrate;
             m->tick = m->callback();
             /* note pitches */
             for(int i=0; i<NUMV; ++i) m->tick[i].note_rate = get_rate(m->tick[i].note);
+
+            ++m->num_ticks;
+            m->next_tick = m->num_ticks * m->srate * 60 / m->bpm / m->tickrate;
         }
 
         for(int i=0; i<NUMV; i++) m->tick[i].phase += m->tick[i].note_rate;
