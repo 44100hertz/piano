@@ -19,6 +19,7 @@ enum {
 typedef struct {
     Instr* instr;
     long   phase;
+    double vol;
     long   note_rate;
     int    key_state;
     int    age;

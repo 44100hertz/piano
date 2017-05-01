@@ -30,18 +30,22 @@ void mixer_callback(void* userdata, Uint8* stream, int len)
     for(int i=0; i<len; i+=2) {
         if(m->scount == m->next_tick) {
             m->tick = m->callback();
-            /* note pitches */
-            for(int i=0; i<NUMV; ++i) m->tick[i].note_rate = get_rate(m->tick[i].note);
+
+            /* Set pitch and volume (once per tick) */
+            for(int i=0; i<NUMV; ++i) {
+                m->tick[i].vol = instr_env_get(&m->tick[i]);
+                m->tick[i].note_rate = get_rate(m->tick[i].note);
+            }
 
             ++m->num_ticks;
             m->next_tick = m->num_ticks * m->srate * 60 / m->bpm / m->tickrate;
         }
 
-        for(int i=0; i<NUMV; i++) m->tick[i].phase += m->tick[i].note_rate;
-
-        /* Sum the channel values */
         double total = 0;
-        for(int i=0; i<NUMV; i++) total += instr_get(&m->tick[i], m->srate);
+        for(int i=0; i<NUMV; i++) {
+            m->tick[i].phase += m->tick[i].note_rate;
+            total += instr_get(&m->tick[i], m->srate);
+        }
 
         /* Quantize and fill part of buffer */
         int16_t total16 = softclip(total * 0.15) * 0x7fff;
