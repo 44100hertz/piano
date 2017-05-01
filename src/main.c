@@ -48,12 +48,15 @@ int main(int argc, char** argv)
         SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN
         );
 
-    SDL_Event e;
-    int quit = 0;
-
+    SDL_Renderer* rdr = SDL_CreateRenderer(window, -1,
+                                           SDL_RENDERER_PRESENTVSYNC |
+                                           SDL_RENDERER_ACCELERATED |
+                                           SDL_RENDERER_TARGETTEXTURE);
     mixer_init(&m, have.freq, keyboard_callback);
     keyboard_init();
 
+    SDL_Event e;
+    int quit = 0;
     while(!quit) {
         while(SDL_PollEvent(&e)) {
             switch(e.type) {
@@ -66,9 +69,12 @@ int main(int argc, char** argv)
                 break;
             }
         }
+        SDL_SetRenderDrawColor(rdr, 0, 0, 0, 255);
+        SDL_RenderClear(rdr);
         SDL_GL_SwapWindow(window);
     }
 
+    SDL_DestroyRenderer(rdr);
     SDL_CloseAudioDevice(dev);
     return 0;
 }
