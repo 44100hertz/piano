@@ -83,8 +83,15 @@ void keyboard_keydown(SDL_Scancode scancode)
     switch(scancode) {
     case SDL_SCANCODE_PAGEUP:   ++instr; break;
     case SDL_SCANCODE_PAGEDOWN: --instr; break;
-    case SDL_SCANCODE_HOME: ++octave; clear_keys(); break;
-    case SDL_SCANCODE_END:  --octave; clear_keys(); break;
+    case SDL_SCANCODE_HOME:
+        if(octave<6) ++octave;
+        clear_keys();
+        break;
+    case SDL_SCANCODE_END:
+        if(octave>1) --octave;
+        clear_keys();
+        break;
+        break;
     default:
         note = scancode_note[scancode];
         if(note==NO_NOTE) return;
