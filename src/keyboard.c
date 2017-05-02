@@ -8,7 +8,7 @@ static Note tick[NUMV];
 static int instr;
 static int octave;
 static int slot; /* Rolling instrument index */
-static const int NO_NOTE = -1024;
+static const int NO_NOTE = -1;
 
 static int note_scancode[] = {
     SDL_SCANCODE_A, /* B -1 */
@@ -45,13 +45,13 @@ static int note_scancode[] = {
 static int* scancode_note;
 
 static int to_a440(int note) {
-    return note + octave * 12 - 3;
+    return note + octave * 12 + 2;
 }
 
 void keyboard_init()
 {
-    instr = 0;
     octave = 4;
+
     /* Generate a reverse table */
     const int max = SDL_NUM_SCANCODES;
     scancode_note = malloc(max * sizeof(int));
