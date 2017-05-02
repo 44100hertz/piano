@@ -12,17 +12,17 @@ void mixer_init(Mixer *m, int srate, Note* (*callback)())
     m->tickrate = 24;
     m->bpm = 120;
     m->callback = callback;
-    m->ramp_rate = 20.0 / srate;
+    m->ramp_rate = 20.0f / srate;
 }
 
 static long get_rate(int note)
 {
-    return (440*PP) * pow(2, (note-69)/12.0);
+    return (440*PP) * powf(2, (note-69)/12.0f);
 }
 static float softclip(float i)
 {
-    if(fabs(i) > 1) return copysign(1, i);
-    return i * 1.5 - 0.5 * i * i * i;
+    if(fabsf(i) > 1) return copysignf(1, i);
+    return i * 1.5f - 0.5f * i * i * i;
 }
 void mixer_callback(void* userdata, Uint8* stream, int len)
 {
@@ -53,7 +53,7 @@ void mixer_callback(void* userdata, Uint8* stream, int len)
         }
 
         /* Quantize, fill buffer */
-        stream16[i] = softclip(total * 0.15) * INT16_MAX;
+        stream16[i] = softclip(total * 0.15f) * INT16_MAX;
 
         m->scount++;
     }

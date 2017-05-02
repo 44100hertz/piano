@@ -4,13 +4,13 @@
 #include "wave.h"
 
 #define LUTSIZE (INT16_MAX / 4)
-#define M_PI 3.141592653589
+#define M_PI 3.141592653589f
 static float lut[LUTSIZE];
 
 void wave_init()
 {
     for(int i=0; i<LUTSIZE; ++i) {
-        lut[i] = sinf(i * M_PI / 2.0 / LUTSIZE);
+        lut[i] = sinf(i * M_PI / 2.0f / LUTSIZE);
     }
 }
 
@@ -55,7 +55,7 @@ float wave_quartersine(uint16_t off) {
  --|---|---|--
        '---' */
 float wave_pulse(uint16_t off) {
-    return off < INT16_MAX/4 ? 1 : -1;
+    return off < INT16_MAX/2 ? 1.0 : -1.0;
 }
 
 /*  /|  /|

@@ -5,18 +5,19 @@
 #include "instr.h"
 #include "wave.h"
 
-double instr_env_get(Note* note)
+float instr_env_get(Note* note)
 {
     switch(note->key_state) {
     case KEY_OFF: return 0;
-    case KEY_HELD: return fmax(1 - (note->age / 80.0), 0);
-    case KEY_RELEASE: return fmax(1 - (note->age / 80.0), 0) * 0.5;
+    case KEY_HELD: return fmaxf(1 - (note->age / 80.0f), 0);
+    case KEY_RELEASE: return fmaxf(1 - (note->age / 80.0f), 0) * 0.5f;
     default: fprintf(stderr, "invalid note state: %d\n", note->key_state); return 0;
     }
 }
 
 float instr_get(Note* note, long srate)
 {
-    float car = wave_camelsine(note->phase * INT16_MAX / srate / PP) * INT16_MAX * note->rampvol;
+    uint16_t car = INT16_MAX * (note->rampvol *
+                               wave_camelsine(note->phase * INT16_MAX / srate / PP));
     return wave_sine(car);
 }

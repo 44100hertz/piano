@@ -1,1 +1,1 @@
-int piano_init();
+int piano_init(void);
