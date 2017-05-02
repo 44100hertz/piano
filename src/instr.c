@@ -17,5 +17,5 @@ double instr_env_get(Note* note)
 
 float instr_get(Note* note, long srate)
 {
-    return wave_camelsine(note->phase * INT16_MAX / srate / PP) * note->vol;
+    return wave_sine(note->phase * INT16_MAX / srate / PP) * note->vol;
 }
