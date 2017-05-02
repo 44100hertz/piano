@@ -15,13 +15,13 @@ void instr_tick(Note* note)
 
     switch(note->key_state) {
     case KEY_OFF: note->vol = 0; break;
-    case KEY_HELD: note->vol = fmaxf(1 - (note->age / 80.0f), 0); break;
-    case KEY_RELEASE: note->vol = fmaxf(1 - (note->age / 80.0f), 0) * 0.5f; break;
+    case KEY_HELD: note->vol = fmaxf(1 - (note->age / 160.0f), 0); break;
+    case KEY_RELEASE: note->vol = fmaxf(1 - (note->age / 160.0f), 0) * (1/128.0f); break;
     default: fprintf(stderr, "invalid note state: %d\n", note->key_state);
     }
 }
 float instr_get(Note* note, long srate)
 {
-    float car = (note->rampvol * wave_camelsine(note->phase * INT16_MAX / srate / PP));
-    return wave_sine(UINT16_MAX * 2 * car);
+    float car = (note->rampvol * wave_camelsine(note->phase * (INT16_MAX / (float)srate / PP)));
+    return wave_sine(UINT16_MAX * car);
 }

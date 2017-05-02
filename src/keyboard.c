@@ -45,7 +45,7 @@ static int note_scancode[] = {
 static int* scancode_note;
 
 static int to_a440(int note) {
-    return note + octave * 12 + 2;
+    return note + octave * 12 - 10;
 }
 
 void keyboard_init()
