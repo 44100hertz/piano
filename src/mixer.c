@@ -1,4 +1,3 @@
-#include <string.h>
 #include <stdio.h>
 #include <math.h>
 #include <SDL2/SDL.h>
@@ -19,7 +18,7 @@ static long get_rate(int note)
 {
     return (440*PP) * pow(2, (note-69)/12.0);
 }
-static double softclip(double i)
+static float softclip(float i)
 {
     if(fabs(i) > 1) return copysign(1, i);
     return i * 1.5 - 0.5 * i * i * i;
@@ -41,15 +40,16 @@ void mixer_callback(void* userdata, Uint8* stream, int len)
             m->next_tick = m->num_ticks * m->srate * 60 / m->bpm / m->tickrate;
         }
 
-        double total = 0;
+        float total = 0;
         for(int i=0; i<NUMV; i++) {
             m->tick[i].phase += m->tick[i].note_rate;
             total += instr_get(&m->tick[i], m->srate);
         }
 
         /* Quantize and fill part of buffer */
-        int16_t total16 = softclip(total * 0.15) * 0x7fff;
-        memcpy(&stream[i], &total16, 2);
+        int16_t total16 = softclip(total * 0.3) * INT16_MAX;
+        stream[i] = total16;
+        stream[i+1] = total16 >> 8;
 
         m->scount++;
     }

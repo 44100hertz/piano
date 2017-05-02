@@ -2,11 +2,11 @@
 /* #include "global.h" */
 
 typedef struct {
+    Note* tick;
     long  srate, scount;
     long  next_tick;
     int   num_ticks;
     int   bpm, tickrate;
-    Note* tick;
     Note* (*callback)();
 } Mixer;
 

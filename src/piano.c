@@ -1,6 +1,8 @@
 #include <stdio.h>
+#include <stdint.h>
 #include <SDL2/SDL.h>
 
+#include "wave.h"
 #include "global.h"
 #include "mixer.h"
 #include "keyboard.h"
@@ -56,6 +58,7 @@ int piano_init()
                                            SDL_RENDERER_TARGETTEXTURE
         );
     mixer_init(&m, have.freq, keyboard_callback);
+    wave_init();
     keyboard_init();
     SDL_PauseAudioDevice(dev, 0);
 
