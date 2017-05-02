@@ -28,7 +28,7 @@ int piano_init()
     }
     SDL_AudioSpec want = {
         .freq = 48000,
-        .format = AUDIO_S16,
+        .format = AUDIO_S16SYS,
         .channels = 1,
         .samples = 1024,
         .callback = mixer_callback,
@@ -38,7 +38,7 @@ int piano_init()
 
     SDL_AudioDeviceID dev;
     if(!(dev = SDL_OpenAudioDevice(
-             NULL, 0, &want, &have, SDL_AUDIO_ALLOW_ANY_CHANGE))) {
+             NULL, 0, &want, &have, SDL_AUDIO_ALLOW_FREQUENCY_CHANGE))) {
         SDL_Log("%s", SDL_GetError());
         return -1;
     }
