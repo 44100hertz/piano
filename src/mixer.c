@@ -53,7 +53,7 @@ void mixer_callback(void* userdata, Uint8* stream, int len)
         }
 
         /* Quantize, fill buffer */
-        stream16[i] = softclip(total * 0.15f) * INT16_MAX;
+        stream16[i] = INT16_MAX * softclip(total * 0.15f);
 
         m->scount++;
     }
