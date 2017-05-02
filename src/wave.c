@@ -9,7 +9,7 @@ static float lut[LUTSIZE];
 void wave_init()
 {
     for(int i=0; i<LUTSIZE; ++i) {
-        lut[i] = sinf(i / (float)LUTSIZE);
+        lut[i] = sinf(i * M_PI / 2.0 / LUTSIZE);
     }
 }
 
@@ -18,8 +18,8 @@ void wave_init()
         '-'  */
 float wave_sine(int off) {
     div_t d = div(off, LUTSIZE);
-    int index = (d.quot % 2 == 0) ? d.rem : LUTSIZE - d.rem;
-    int negative = (d.quot % 4 < 3) ? 1 : -1;
+    int index = (d.quot % 2 == 0) ? d.rem : LUTSIZE - d.rem - 1;
+    int negative = (d.quot % 4 < 2) ? 1 : -1;
     return negative * lut[index];
 }
 
@@ -29,7 +29,7 @@ float wave_sine(int off) {
 float wave_halfsine(int off) {
     div_t d = div(off, LUTSIZE);
     if(d.quot % 4 > 2) return 0;
-    int index = (d.quot % 2 == 0) ? d.rem : LUTSIZE - d.rem;
+    int index = (d.quot % 2 == 0) ? d.rem : LUTSIZE - d.rem - 1;
     return lut[index];
 }
 
@@ -38,7 +38,7 @@ float wave_halfsine(int off) {
              */
 float wave_camelsine(int off) {
     div_t d = div(off, LUTSIZE);
-    int index = (d.quot & 1) ? LUTSIZE - d.rem : d.rem;
+    int index = (d.quot % 2 == 0) ? d.rem : LUTSIZE - d.rem - 1;
     return lut[index];
 }
 
