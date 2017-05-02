@@ -1,7 +1,4 @@
-#ifndef PP
-#define PP 0xff /* Pitch Precision; when phase or pitch is used, I use
-                 * integers, and this is the denominator. */
-#endif
+/* #include <stdint.h> */
 
 #ifndef NUMV
 #define NUMV 32 /* Max number of voices for polyphony. */
@@ -17,12 +14,12 @@ enum {
 };
 
 typedef struct {
-    Instr* instr;
-    long   phase;
-    float  vol;
-    float  rampvol;
-    long   note_rate;
-    int    key_state;
-    int    age;
-    int    note;
+    Instr*   instr;
+    uint32_t phase;
+    uint32_t note_rate;
+    float    vol;
+    float    rampvol;
+    int      key_state;
+    int      age;
+    int      note;
 } Note;

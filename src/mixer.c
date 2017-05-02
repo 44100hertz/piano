@@ -29,7 +29,7 @@ void mixer_callback(void* userdata, Uint8* stream, int len)
             /* Get note data from keyboard */
             m->tick = m->callback();
             /* Update instrument with note data */
-            for(int i=0; i<NUMV; ++i) instr_tick(&m->tick[i]);
+            for(int i=0; i<NUMV; ++i) instr_tick(&m->tick[i], m->srate);
 
             /* Find the next tick */
             ++m->num_ticks;
@@ -40,9 +40,10 @@ void mixer_callback(void* userdata, Uint8* stream, int len)
         for(int i=0; i<NUMV; i++) {
             Note* n = &m->tick[i];
 
-            n->rampvol += fminf(m->ramp_rate, fmaxf(-m->ramp_rate, n->vol - n->rampvol));
+            n->rampvol += fminf(m->ramp_rate, fmaxf(-m->ramp_rate,
+                                                    n->vol - n->rampvol));
             n->phase += n->note_rate;
-            total += instr_get(&m->tick[i], m->srate);
+            total += instr_get(&m->tick[i]);
         }
 
         stream16[i] = INT16_MAX * softclip(total * 0.15);
