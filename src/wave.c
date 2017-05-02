@@ -4,6 +4,7 @@
 #include "wave.h"
 
 #define LUTSIZE (INT16_MAX / 4)
+#define M_PI 3.141592653589
 static float lut[LUTSIZE];
 
 void wave_init()
