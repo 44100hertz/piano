@@ -7,6 +7,7 @@ typedef struct {
     long  next_tick;
     int   num_ticks;
     int   bpm, tickrate;
+    float ramp_rate;
     Note* (*callback)();
 } Mixer;
 

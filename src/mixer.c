@@ -12,6 +12,7 @@ void mixer_init(Mixer *m, int srate, Note* (*callback)())
     m->tickrate = 24;
     m->bpm = 120;
     m->callback = callback;
+    m->ramp_rate = 20.0 / srate;
 }
 
 static long get_rate(int note)
@@ -43,12 +44,16 @@ void mixer_callback(void* userdata, Uint8* stream, int len)
 
         float total = 0;
         for(int i=0; i<NUMV; i++) {
-            m->tick[i].phase += m->tick[i].note_rate;
+            Note* n = &m->tick[i];
+
+            n->rampvol += fminf(m->ramp_rate,
+                                fmaxf(-m->ramp_rate, n->vol - n->rampvol));
+            n->phase += n->note_rate;
             total += instr_get(&m->tick[i], m->srate);
         }
 
         /* Quantize, fill buffer */
-        stream16[i] = softclip(total * 0.3) * INT16_MAX;
+        stream16[i] = softclip(total * 0.15) * INT16_MAX;
 
         m->scount++;
     }
