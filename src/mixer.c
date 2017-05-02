@@ -15,10 +15,6 @@ void mixer_init(Mixer *m, int srate, Note* (*callback)())
     m->ramp_rate = 20.0f / srate;
 }
 
-static long get_rate(int note)
-{
-    return (440*PP) * powf(2, (note-69)/12.0f);
-}
 static float softclip(float i)
 {
     if(fabsf(i) > 1) return copysignf(1, i);
@@ -30,14 +26,12 @@ void mixer_callback(void* userdata, Uint8* stream, int len)
     Mixer* m = userdata;
     for(int i=0; i<len/2; i++) {
         if(m->scount == m->next_tick) {
+            /* Get note data from keyboard */
             m->tick = m->callback();
+            /* Update instrument with note data */
+            for(int i=0; i<NUMV; ++i) instr_tick(&m->tick[i]);
 
-            /* Set pitch and volume (once per tick) */
-            for(int i=0; i<NUMV; ++i) {
-                m->tick[i].vol = instr_env_get(&m->tick[i]);
-                m->tick[i].note_rate = get_rate(m->tick[i].note);
-            }
-
+            /* Find the next tick */
             ++m->num_ticks;
             m->next_tick = m->num_ticks * m->srate * 60 / m->bpm / m->tickrate;
         }
@@ -46,14 +40,12 @@ void mixer_callback(void* userdata, Uint8* stream, int len)
         for(int i=0; i<NUMV; i++) {
             Note* n = &m->tick[i];
 
-            n->rampvol += fminf(m->ramp_rate,
-                                fmaxf(-m->ramp_rate, n->vol - n->rampvol));
+            n->rampvol += fminf(m->ramp_rate, fmaxf(-m->ramp_rate, n->vol - n->rampvol));
             n->phase += n->note_rate;
             total += instr_get(&m->tick[i], m->srate);
         }
 
-        /* Quantize, fill buffer */
-        stream16[i] = INT16_MAX * softclip(total * 0.15f);
+        stream16[i] = INT16_MAX * softclip(total * 0.15);
 
         m->scount++;
     }
