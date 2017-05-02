@@ -25,8 +25,9 @@ static float softclip(float i)
 }
 void mixer_callback(void* userdata, Uint8* stream, int len)
 {
+    Uint16* stream16 = (Uint16*)stream;
     Mixer* m = userdata;
-    for(int i=0; i<len; i+=2) {
+    for(int i=0; i<len/2; i++) {
         if(m->scount == m->next_tick) {
             m->tick = m->callback();
 
@@ -46,10 +47,8 @@ void mixer_callback(void* userdata, Uint8* stream, int len)
             total += instr_get(&m->tick[i], m->srate);
         }
 
-        /* Quantize and fill part of buffer */
-        int16_t total16 = softclip(total * 0.3) * INT16_MAX;
-        stream[i] = total16;
-        stream[i+1] = total16 >> 8;
+        /* Quantize, fill buffer */
+        stream16[i] = softclip(total * 0.3) * INT16_MAX;
 
         m->scount++;
     }
