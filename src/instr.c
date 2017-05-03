@@ -14,14 +14,11 @@ void instr_tick(Note* note, long srate)
     note->note_rate = get_rate(note->note) * 0xfffff / srate;
 
     switch(note->key_state) {
-    case KEY_OFF:
+    case KEY_OFF: case KEY_RELEASE:
         note->vol = 0;
         break;
     case KEY_HELD:
-        note->vol = fmaxf(1 - (note->age / 160.0f), 0);
-        break;
-    case KEY_RELEASE:
-        note->vol = fmaxf(1 - (note->age / 160.0f), 0) * (1/128.0f);
+        note->vol = fmaxf(1 - (note->age / 160.0f), 0.5);
         break;
     default:
         fprintf(stderr, "invalid note state: %d\n", note->key_state);
