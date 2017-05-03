@@ -5,7 +5,8 @@
 static void destroy();
 
 static Note tick[NUMV];
-static int instr;
+static int car, mod;
+static float level;
 static int octave;
 static int slot; /* Rolling instrument index */
 static const int NO_NOTE = -1;
@@ -51,6 +52,8 @@ static int to_a440(int note) {
 void keyboard_init()
 {
     octave = 4;
+    car = mod = 0;
+    level = 1.0f;
 
     /* Generate a reverse table */
     const int max = SDL_NUM_SCANCODES;
@@ -81,8 +84,6 @@ void keyboard_keydown(SDL_Scancode scancode)
 {
     int note;
     switch(scancode) {
-    case SDL_SCANCODE_PAGEUP:   ++instr; break;
-    case SDL_SCANCODE_PAGEDOWN: --instr; break;
     case SDL_SCANCODE_HOME:
         if(octave<6) ++octave;
         clear_keys();
@@ -91,6 +92,24 @@ void keyboard_keydown(SDL_Scancode scancode)
         if(octave>1) --octave;
         clear_keys();
         break;
+    case SDL_SCANCODE_F1:
+        car = (car+1) % NUM_WAVES;
+        break;
+    case SDL_SCANCODE_F2:
+        car = (car-1) % NUM_WAVES;
+        break;
+    case SDL_SCANCODE_F3:
+        mod = (mod+1) % NUM_WAVES;
+        break;
+    case SDL_SCANCODE_F4:
+        mod = (mod-1) % NUM_WAVES;
+        break;
+    case SDL_SCANCODE_F5:
+        level += 1/8.0f;
+        break;
+    case SDL_SCANCODE_F6:
+        level = fmax(level-1/8.0f, 1/8.0f);
+        printf("%f\n", level);
         break;
     default:
         note = scancode_note[scancode];
@@ -98,9 +117,11 @@ void keyboard_keydown(SDL_Scancode scancode)
 
         slot = (slot + 1) % NUMV;
         tick[slot].note = to_a440(note);
+        tick[slot].car = car;
+        tick[slot].mod = mod;
+        tick[slot].level = level;
         tick[slot].key_state = KEY_HELD;
         tick[slot].age = 0;
-        /* tick.instr[i] = instr; */
     }
 }
 

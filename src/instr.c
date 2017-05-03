@@ -11,7 +11,7 @@ static double get_rate(int note)
 }
 void instr_tick(Note* note, long srate)
 {
-    note->note_rate = get_rate(note->note) * 0xfffff / srate;
+    note->note_rate = get_rate(note->note) * 0x100000 / srate;
 
     switch(note->key_state) {
     case KEY_OFF: case KEY_RELEASE:
@@ -25,8 +25,22 @@ void instr_tick(Note* note, long srate)
         break;
     }
 }
+static float switch_wave(uint16_t phase, int kind)
+{
+    switch(kind) {
+    case WAVE_SINE:  return wave_sine(phase);
+    case WAVE_HSINE: return wave_halfsine(phase);
+    case WAVE_CSINE: return wave_camelsine(phase);
+    case WAVE_QSINE: return wave_quartersine(phase);
+    case WAVE_PULSE: return wave_pulse(phase);
+    case WAVE_RAMP:  return wave_ramp(phase);
+    default:
+        fprintf(stderr, "Invalid waveform\n");
+        return 0;
+    }
+}
 float instr_get(Note* note)
 {
-    float car = (note->rampvol * wave_camelsine(note->phase * (1.0f/0xf)));
-    return wave_sine(UINT16_MAX * car);
+    float car = switch_wave(note->phase / 0xf, note->car) * note->rampvol;
+    return switch_wave(UINT16_MAX * note->level * car, note->mod);
 }

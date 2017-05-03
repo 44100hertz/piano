@@ -29,7 +29,7 @@ float wave_sine(uint16_t off) {
              */
 float wave_halfsine(uint16_t off) {
     div_t d = div(off, LUTSIZE);
-    if(d.quot % 4 > 2) return 0;
+    if(d.quot % 4 >= 2) return 0;
     int index = (d.quot % 2 == 0) ? d.rem : LUTSIZE - d.rem - 1;
     return lut[index];
 }
