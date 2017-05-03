@@ -51,13 +51,6 @@ float wave_quartersine(uint16_t off) {
     return (d.quot % 2 == 0) ? lut[d.rem] : 0;
 }
 
-/* .---.
- --|---|---|--
-       '---' */
-float wave_pulse(uint16_t off) {
-    return off < INT16_MAX/2 ? 1.0 : -1.0;
-}
-
 /*  /|  /|
  --/-|-/-|-/--
      |/  |/ */

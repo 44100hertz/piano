@@ -15,10 +15,9 @@ enum {
     WAVE_HSINE,
     WAVE_CSINE,
     WAVE_QSINE,
-    WAVE_PULSE,
     WAVE_RAMP,
 };
-#define NUM_WAVES 6;
+#define NUM_WAVES 4
 
 typedef struct {
     int      car;   /* Carrier wave type for PM synth */

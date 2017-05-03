@@ -32,7 +32,6 @@ static float switch_wave(uint16_t phase, int kind)
     case WAVE_HSINE: return wave_halfsine(phase);
     case WAVE_CSINE: return wave_camelsine(phase);
     case WAVE_QSINE: return wave_quartersine(phase);
-    case WAVE_PULSE: return wave_pulse(phase);
     case WAVE_RAMP:  return wave_ramp(phase);
     default:
         fprintf(stderr, "Invalid waveform\n");

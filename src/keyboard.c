@@ -92,25 +92,12 @@ void keyboard_keydown(SDL_Scancode scancode)
         if(octave>1) --octave;
         clear_keys();
         break;
-    case SDL_SCANCODE_F1:
-        car = (car+1) % NUM_WAVES;
-        break;
-    case SDL_SCANCODE_F2:
-        car = (car-1) % NUM_WAVES;
-        break;
-    case SDL_SCANCODE_F3:
-        mod = (mod+1) % NUM_WAVES;
-        break;
-    case SDL_SCANCODE_F4:
-        mod = (mod-1) % NUM_WAVES;
-        break;
-    case SDL_SCANCODE_F5:
-        level += 1/8.0f;
-        break;
-    case SDL_SCANCODE_F6:
-        level = fmax(level-1/8.0f, 1/8.0f);
-        printf("%f\n", level);
-        break;
+    case SDL_SCANCODE_F1: if(car<NUM_WAVES) ++car; break;
+    case SDL_SCANCODE_F2: if(car>0) --car; break;
+    case SDL_SCANCODE_F3: if(mod<NUM_WAVES) ++mod; break;
+    case SDL_SCANCODE_F4: if(mod>0) --mod; break;
+    case SDL_SCANCODE_F5: level += 1/8.0f; break;
+    case SDL_SCANCODE_F6: level = fmax(level-1/8.0f, 1/8.0f); break;
     default:
         note = scancode_note[scancode];
         if(note==NO_NOTE) return;
