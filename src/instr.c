@@ -19,7 +19,6 @@ void instr_tick(Note* note, long srate)
         break;
     case KEY_HELD:
         note->vol = fmaxf(1 - (note->age / 160.0f), 0);
-        printf("%d\n", note->note_rate);
         break;
     case KEY_RELEASE:
         note->vol = fmaxf(1 - (note->age / 160.0f), 0) * (1/128.0f);
