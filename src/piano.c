@@ -50,7 +50,7 @@ int piano_init()
     SDL_Window* window = SDL_CreateWindow(
         "Piano",
         SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-        800, 600,
+        800, 400,
         SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN
         );
     SDL_Renderer* rdr = SDL_CreateRenderer(window, -1,
@@ -58,6 +58,7 @@ int piano_init()
                                            SDL_RENDERER_ACCELERATED |
                                            SDL_RENDERER_TARGETTEXTURE
         );
+    SDL_RenderSetLogicalSize(rdr, 800, 400);
     mixer_init(&m, have.freq, keyboard_callback);
     wave_init();
     keyboard_init();
@@ -65,6 +66,7 @@ int piano_init()
 
     SDL_Event e;
     int quit = 0;
+
     while(!quit){
         while(SDL_PollEvent(&e)){
             switch(e.type){
@@ -80,7 +82,7 @@ int piano_init()
         SDL_SetRenderDrawColor(rdr, 0, 0, 0, 255);
         SDL_RenderClear(rdr);
         SDL_SetRenderDrawColor(rdr, 100, 255, 200, 255);
-        SDL_RenderDrawPoints(rdr, m.scope.points, m.scope.frame_size);
+        SDL_RenderDrawLines(rdr, m.scope.points, m.scope.frame_size);
         SDL_GL_SwapWindow(window);
     }
 

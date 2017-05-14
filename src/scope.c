@@ -19,7 +19,7 @@ void scope_fill(Scope* s, Sint16* samples, int size)
         s->offset = (s->offset+1) % s->frame_size;
         s->points[s->offset] = (SDL_Point){
             .x = 800 * s->offset / s->frame_size,
-            .y = 300 + 300 * samples[i] / INT16_MAX
+            .y = 200 + 400 * samples[i] / INT16_MAX
         };
     }
 }
