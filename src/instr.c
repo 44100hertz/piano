@@ -13,7 +13,7 @@ void instr_tick(Note* note, long srate)
 {
     note->note_rate = get_rate(note->note) * 0x100000 / srate;
 
-    switch(note->key_state) {
+    switch(note->key_state){
     case KEY_OFF: case KEY_RELEASE:
         note->vol = 0;
         break;
@@ -27,7 +27,7 @@ void instr_tick(Note* note, long srate)
 }
 static float switch_wave(uint16_t phase, int kind)
 {
-    switch(kind) {
+    switch(kind){
     case WAVE_SINE:  return wave_sine(phase);
     case WAVE_HSINE: return wave_halfsine(phase);
     case WAVE_CSINE: return wave_camelsine(phase);

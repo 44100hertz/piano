@@ -45,7 +45,7 @@ static int note_scancode[] = {
 };
 static int* scancode_note;
 
-static int to_a440(int note) {
+static int to_a440(int note){
     return note + octave * 12 - 10;
 }
 
@@ -60,7 +60,7 @@ void keyboard_init()
     scancode_note = malloc(max * sizeof(int));
     memset(scancode_note, NO_NOTE, max * sizeof(int));
     const int num_notes = sizeof(note_scancode) / sizeof(int);
-    for(int i=0; i<num_notes; ++i) {
+    for(int i=0; i<num_notes; ++i){
         scancode_note[note_scancode[i]] = i;
     }
     atexit(destroy);
@@ -83,7 +83,7 @@ static void clear_keys()
 void keyboard_keydown(SDL_Scancode scancode)
 {
     int note;
-    switch(scancode) {
+    switch(scancode){
     case SDL_SCANCODE_HOME:
         if(octave<6) ++octave;
         clear_keys();
@@ -115,8 +115,8 @@ void keyboard_keydown(SDL_Scancode scancode)
 void keyboard_keyup(SDL_Scancode scancode)
 {
     int note = to_a440(scancode_note[scancode]);
-    for(int i=0; i<NUMV; ++i) {
-        if(tick[i].note == note && tick[i].key_state == KEY_HELD) {
+    for(int i=0; i<NUMV; ++i){
+        if(tick[i].note == note && tick[i].key_state == KEY_HELD){
             tick[i].key_state = KEY_RELEASE;
             return;
         }
@@ -125,7 +125,7 @@ void keyboard_keyup(SDL_Scancode scancode)
 
 Note* keyboard_callback()
 {
-    for(int i=0; i<NUMV; ++i) {
+    for(int i=0; i<NUMV; ++i){
         if(tick[i].key_state > KEY_OFF) tick[i].age++;
     }
     return tick;

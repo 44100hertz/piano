@@ -22,7 +22,7 @@ int piano_init()
 {
     Mixer m;
 
-    if(SDL_Init(SDL_INIT_AUDIO | SDL_INIT_VIDEO)) {
+    if(SDL_Init(SDL_INIT_AUDIO | SDL_INIT_VIDEO)){
         SDL_Log("%s", SDL_GetError());
         return -1;
     }
@@ -38,7 +38,7 @@ int piano_init()
 
     SDL_AudioDeviceID dev;
     if(!(dev = SDL_OpenAudioDevice(
-             NULL, 0, &want, &have, SDL_AUDIO_ALLOW_FREQUENCY_CHANGE))) {
+             NULL, 0, &want, &have, SDL_AUDIO_ALLOW_FREQUENCY_CHANGE))){
         SDL_Log("%s", SDL_GetError());
         return -1;
     }
@@ -64,9 +64,9 @@ int piano_init()
 
     SDL_Event e;
     int quit = 0;
-    while(!quit) {
-        while(SDL_PollEvent(&e)) {
-            switch(e.type) {
+    while(!quit){
+        while(SDL_PollEvent(&e)){
+            switch(e.type){
             case SDL_QUIT: quit=1; break;
             case SDL_KEYDOWN:
                 if(!e.key.repeat) keyboard_keydown(e.key.keysym.scancode);

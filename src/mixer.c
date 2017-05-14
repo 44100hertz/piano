@@ -24,8 +24,8 @@ void mixer_callback(void* userdata, Uint8* stream, int len)
 {
     Uint16* stream16 = (Uint16*)stream;
     Mixer* m = userdata;
-    for(int i=0; i<len/2; i++) {
-        if(m->scount == m->next_tick) {
+    for(int i=0; i<len/2; i++){
+        if(m->scount == m->next_tick){
             /* Get note data from keyboard */
             m->tick = m->callback();
             /* Update instrument with note data */
@@ -37,7 +37,7 @@ void mixer_callback(void* userdata, Uint8* stream, int len)
         }
 
         float total = 0;
-        for(int i=0; i<NUMV; i++) {
+        for(int i=0; i<NUMV; i++){
             Note* n = &m->tick[i];
 
             n->rampvol += fminf(m->ramp_rate, fmaxf(-m->ramp_rate,
