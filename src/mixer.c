@@ -3,6 +3,7 @@
 #include <SDL2/SDL.h>
 #include "global.h"
 #include "instr.h"
+#include "scope.h"
 #include "mixer.h"
 
 void mixer_init(Mixer *m, int srate, Note* (*callback)())
@@ -13,6 +14,7 @@ void mixer_init(Mixer *m, int srate, Note* (*callback)())
     m->bpm = 120;
     m->callback = callback;
     m->ramp_rate = 20.0f / srate;
+    m->scope = scope_init(srate, 60);
 }
 
 static float softclip(float i)
@@ -22,7 +24,7 @@ static float softclip(float i)
 }
 void mixer_callback(void* userdata, Uint8* stream, int len)
 {
-    Uint16* stream16 = (Uint16*)stream;
+    Sint16* stream16 = (Sint16*)stream;
     Mixer* m = userdata;
     for(int i=0; i<len/2; i++){
         if(m->scount == m->next_tick){
@@ -50,4 +52,5 @@ void mixer_callback(void* userdata, Uint8* stream, int len)
 
         m->scount++;
     }
+    scope_fill(&m->scope, stream16, len/2);
 }

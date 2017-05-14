@@ -4,6 +4,7 @@
 
 #include "wave.h"
 #include "global.h"
+#include "scope.h"
 #include "mixer.h"
 #include "keyboard.h"
 #include "piano.h"
@@ -78,9 +79,12 @@ int piano_init()
         }
         SDL_SetRenderDrawColor(rdr, 0, 0, 0, 255);
         SDL_RenderClear(rdr);
+        SDL_SetRenderDrawColor(rdr, 100, 255, 200, 255);
+        SDL_RenderDrawPoints(rdr, m.scope.points, m.scope.frame_size);
         SDL_GL_SwapWindow(window);
     }
 
+    scope_destroy(&m.scope);
     SDL_DestroyRenderer(rdr);
     SDL_CloseAudioDevice(dev);
     return 0;
